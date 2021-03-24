@@ -1,0 +1,84 @@
+---
+title: "Peer-graded Assignment: Statistical Inference Course Project PART 2"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+#### Gabriela Ochoa
+## **Resolution Part 2**
+Now in the second portion of the project, we're going to analyze the ToothGrowth data in the R datasets package.
+
+*1.* We load the ToothGrowth data in the R datasets package and perform some basic exploratory data analyses
+```{r}
+library(datasets)
+data(ToothGrowth)
+head(ToothGrowth)
+```
+### **EDA**
+
+Data: _The Effect of Vitamin C on Tooth Growth in Guinea Pigs_
+
+Description:
+
+The response is the length of odontoblasts (cells responsible for tooth growth) in 60 guinea pigs. Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods, orange juice or ascorbic acid (a form of vitamin C and coded as VC).
+
+_Format_
+
+A data frame with 60 observations on 3 variables.
+
+| | | | |
+|--|--|--|--|
+|[,1]|len|numeric|Tooth length|
+|[,2]|supp|factor|Supplement type (VC or OJ) |
+|[,3]|dose|numeric|Dose in milligrams/day  |
+
+
+We can visualize the dataset easily with a boxplot and coplot:
+```{r}
+boxplot(len ~ supp * dose, data=ToothGrowth, ylab="Tooth Length", main="Comparing Tooth Growth between different supplements and different dosis", col=c("brown4", "cornflowerblue", "brown4", "cornflowerblue", "brown4", "cornflowerblue"))
+```
+
+```{r}
+require(graphics)
+coplot(len ~ dose | supp, data = ToothGrowth, panel = panel.smooth,xlab = "Comparing Tooth Growth between different supplements and different dosis", col=c("royalblue4"), pch=21)
+```
+*2.* Provide a basic summary of the data.
+
+As we can see in the plots, the average of the tooth length seems to increase with the supplement dosis. 
+this can mean that it might be a relationship between applying a supplement dosis and the tooth growth. 
+
+Further data summaries:
+```{r}
+# basic info
+head(ToothGrowth)
+nrow(ToothGrowth)
+summary(ToothGrowth)
+```
+
+```{r}
+table(ToothGrowth$supp,ToothGrowth$dose)
+```
+*3.* Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+Sample size is not too big, we suggest T distribution
+
+```{r}
+t.test(len ~ supp, data = ToothGrowth)
+```
+
+
+
+Comparing the difference between the two supplements shows no strong evidence to reject the null hypothesis, since the p-value is bigger than the 5% significance level.
+
+However, for this dataset it is important to also compare the differences between the the different dosis level, since bigger dosis may yield contradicting evidence.
+```{r}
+t.test(ToothGrowth$len, ToothGrowth$dose)
+```
+
+Comparing the difference between the two supplements shows enough evidence to reject the null hypothesis, since the p-value aproximates to 0.
+
+**4.** State your conclusions and the assumptions needed for your conclusions.
+
+As already stated, there is no convincing evidence that there is a difference between the two type of supplements based on the existing datasets and T statistics. meaning **we fail to reject the _Null hypothesis_ (H0).**
+
+However, there is convincing evidence that there is a difference between the dosis level, and the growth. meaning **we reject the _Null hypothesis_ (H0) in favour of the alternative hypothesis (Ha).**

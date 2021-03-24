@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/743217/d7bbfbed05b24eb1a6653e0bd81ecce9
+bundleId: https://api.rpubs.com/api/v1/document/743217/d7bbfbed05b24eb1a6653e0bd81ecce9
+url: http://rpubs.com/GabyOM/743217
+when: 1616423034.89544

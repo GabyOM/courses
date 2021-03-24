@@ -1,0 +1,110 @@
+---
+title: "QUIZ 4"
+output: html_notebook
+---
+
+For this quiz we will be using several R packages. R package versions change over time, the right answers have been checked using the following versions of the packages. 
+
+- AppliedPredictiveModeling: v1.1.6
+- caret: v6.0.47
+- ElemStatLearn: v2012.04-0
+- pgmm: v1.1
+- rpart: v4.1.8
+- gbm: v2.1
+- lubridate: v1.3.3
+- forecast: v5.6
+- e1071: v1.6.4 
+```{r, results='hide'}
+library(AppliedPredictiveModeling)
+library(caret)
+library(pgmm)
+library(rpart)
+library(gbm)
+library(lubridate)
+library(forecast)
+library(e1071)
+```
+
+
+If you aren't using these versions of the packages, your answers may not exactly match the right answer, but hopefully should be close.
+
+Load the vowel.train and vowel.test data sets:
+
+```{r, results='hide'}
+#library(ElemStatLearn)
+library(readr)
+vowel.train <- read_csv("https://web.stanford.edu/~hastie/ElemStatLearn/datasets/vowel.train")
+vowel.test <- read_csv("https://web.stanford.edu/~hastie/ElemStatLearn/datasets/vowel.test")
+```
+Set the variable y to be a factor variable in both the training and test set. Then set the seed to 33833. Fit (1) a random forest predictor relating the factor variable y to the remaining variables and (2) a boosted predictor using the "gbm" method. Fit these both with the train() command in the caret package. 
+
+What are the accuracies for the two approaches on the test data set? What is the accuracy among the test set samples where the two methods agree? 
+```{r, results='hide'}
+vowel.train$y <- as.factor(vowel.train$y)
+vowel.test$y <- as.factor(vowel.test$y)
+set.seed(33833)
+mod_rf <- train(y ~ ., data = vowel.train, method = "rf")
+mod_gbm <- train(y ~ ., data = vowel.train, method = "gbm")
+pred_rf <- predict(mod_rf, vowel.test)
+pred_gbm <- predict(mod_gbm, vowel.test)
+```
+
+**ANSWER**
+```{r}
+# Extract accuracies for (1) random forests and (2) boosting
+confusionMatrix(pred_rf, vowel.test$y)$overall[1]
+confusionMatrix(pred_gbm, vowel.test$y)$overall[1]
+
+```
+
+
+```{r}
+predDF <- data.frame(pred_rf, pred_gbm, y = vowel.test$y)
+# Accuracy among the test set samples where the two methods agree
+sum(pred_rf[predDF$pred_rf == predDF$pred_gbm] == 
+        predDF$y[predDF$pred_rf == predDF$pred_gbm]) / 
+    sum(predDF$pred_rf == predDF$pred_gbm)
+```
+
+# **QUESTION 2**
+```{r}
+set.seed(3433)
+data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+
+training = adData[ inTrain,]
+testing = adData[-inTrain,]
+```
+
+Set the seed to 62433 and predict diagnosis with all the other variables using a random forest ("rf"), boosted trees ("gbm") and linear discriminant analysis ("lda") model. Stack the predictions together using random forests ("rf"). What is the resulting accuracy on the test set? Is it better or worse than each of the individual predictions? 
+
+**ANSWER**
+
+```{r, results='hide'}
+set.seed(62433)
+mod_rf <- train(diagnosis ~ ., data = training, method = "rf")
+mod_gbm <- train(diagnosis ~ ., data = training, method = "gbm")
+mod_lda <- train(diagnosis ~ ., data = training, method = "lda")
+pred_rf <- predict(mod_rf, testing)
+pred_gbm <- predict(mod_gbm, testing)
+pred_lda <- predict(mod_lda, testing)
+predDF <- data.frame(pred_rf, pred_gbm, pred_lda, diagnosis = testing$diagnosis)
+combModFit <- train(diagnosis ~ ., method = "rf", data = predDF)
+combPred <- predict(combModFit, predDF)
+```
+
+All four different accuracies:
+```{r}
+#Accuracy using random forests
+confusionMatrix(pred_rf, testing$diagnosis)$overall[1]
+# Accuracy using boosting
+confusionMatrix(pred_gbm, testing$diagnosis)$overall[1]
+# Accuracy using linear discriminant analysis
+confusionMatrix(pred_lda, testing$diagnosis)$overall[1]
+# Stacked Accuracy
+confusionMatrix(combPred, testing$diagnosis)$overall[1]
+
+
+```
+

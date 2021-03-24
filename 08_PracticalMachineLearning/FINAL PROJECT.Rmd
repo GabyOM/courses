@@ -1,0 +1,130 @@
+---
+title: "Peer-graded Assignment Prediction Assignment Writeup"
+output:
+  html_document:
+    df_print: paged
+---
+
+#**Background**
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: [link](http://groupware.les.inf.puc-rio.br/har)
+
+(see the section on the Weight Lifting Exercise Dataset). 
+
+#**Data**
+
+The **training** data for this project are available here: 
+
+[training data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv)
+
+The **test** data are available here:
+
+[testing data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv)
+
+The data for this project come from this source: [Groupware](http://groupware.les.inf.puc-rio.br/har). The data used in this project has been generously provided by the authors, Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. _"Qualitative Activity Recognition of Weight Lifting Exercises."_" Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
+
+#**Project Goal**
+One thing that people regularly do is quantify how  much of a particular activity they do, but they rarely quantify how well they do it. In this project, the main goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants.
+
+The goal of the project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases. 
+
+## Loading libraries
+```{r, results='hide'}
+library(ggplot2)
+library(caret)
+library(randomForest)
+library(e1071)
+library(gbm)
+library(rpart)
+library(rpart.plot)
+library(plyr)
+
+```
+
+## Loading data
+```{r}
+training <- read.csv("pml-training.csv", na.strings = c("NA", ""))
+testing <- read.csv("pml-testing.csv", na.strings = c("NA", ""))
+```
+
+The training dataset has 19622 observations and 160 variables, and the testing data set contains 20 observations and the same variables as the training set. 
+
+
+NA's will be removed and we select the columns we need for the analysis
+```{r}
+training <- training[, colSums(is.na(training)) == 0]
+testing <- testing[, colSums(is.na(testing)) == 0]
+training <- training[, -c(1:7)]
+testing <- testing[, -c(1:7)]
+```
+
+# **Data splitting**
+we proceed with partition rows into training and crossvalidation
+```{r}
+training$classe = factor(training$classe)
+inTrain <- createDataPartition(training$classe, p = 0.75, list=FALSE)
+training <- training[inTrain, ]
+crossval <- training[-inTrain, ]
+dim(training)
+
+```
+
+## **Modelling**
+We'll use the train function, methods: rpart and rf to find the best prediction.
+
+### **Mod method: rpart**
+
+```{r}
+control <- trainControl(method = "cv", number = 5)
+modelFit_rpart <- train(classe ~ ., data = training, method = "rpart", trControl = control)
+print(modelFit_rpart, digits = 4)
+```
+
+
+### **Prediction and Confusion Matrix**
+```{r}
+predict_rpart <- predict(modelFit_rpart, crossval)
+# Show prediction result
+confusionMatrix(crossval$classe, predict_rpart)
+
+```
+From the confusion matrix, the accuracy rate is 0.48, and so the out-of-sample error rate is 0.5. Using classification tree does not predict the outcome classe very well.
+
+### **Mod method: rf (randomForest)**
+```{r}
+rf_modelfit <- randomForest(classe ~ ., data=training)
+print(rf_modelfit, digits = 4)
+```
+
+### **Prediction and Confusion Matrix**
+```{r}
+
+rf_predict <- predict(rf_modelfit, crossval)
+confusionMatrix(rf_predict, crossval$classe)
+```
+This model achieved 100% accuracy on the validation set. Meaning **random forest method** is way better than classification tree method.
+
+
+# **Plotting Fine tuning & trees**
+
+```{r}
+modelFit_rpartOBJ <- varImp(modelFit_rpart)
+plot(modelFit_rpartOBJ, main = "Importance of Top Variables", top = 15)
+```
+
+```{r}
+rpart.plot(modelFit_rpart$finalModel, shadow.col="darkgray")
+```
+
+# **Prediction on Testing data**
+With the above conlusion, We now use random forests to predict the outcome variable classe for the testing set.
+
+```{r}
+(predict(rf_modelfit, testing))
+```
+# **Conclusion**
+With the **Random forest algorithm**, the 20 predicted values are as shown above.
+
+
+#### _Submition Date: 24/03/2021_
+

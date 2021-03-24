@@ -1,0 +1,314 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={Peer-graded Assignment: Statistical Inference Course Project PART1},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Peer-graded Assignment: Statistical Inference Course Project PART1}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\paragraph{Gabriela Ochoa}\label{gabriela-ochoa}
+
+\section{\texorpdfstring{\textbf{Instructions}}{Instructions}}\label{instructions}
+
+The project consists of two parts:
+
+\begin{itemize}
+\tightlist
+\item
+  A simulation exercise.
+\item
+  Basic inferential data analysis.
+\end{itemize}
+
+\subsection{\texorpdfstring{\textbf{Part 1: Simulation Exercise
+instructions}}{Part 1: Simulation Exercise instructions}}\label{part-1-simulation-exercise-instructions}
+
+Illustrate via simulation and associated explanatory text the properties
+of the distribution of the mean of 40 exponentials.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(}\KeywordTok{runif}\NormalTok{(}\DecValTok{1000}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-project_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+and the distribution of 1000 averages of 40 random uniforms
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mns =}\StringTok{ }\OtherTok{NULL}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1} \OperatorTok{:}\StringTok{ }\DecValTok{1000}\NormalTok{) mns =}\StringTok{ }\KeywordTok{c}\NormalTok{(mns, }\KeywordTok{mean}\NormalTok{(}\KeywordTok{runif}\NormalTok{(}\DecValTok{40}\NormalTok{)))}
+\KeywordTok{hist}\NormalTok{(mns)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-project_files/figure-latex/unnamed-chunk-2-1.pdf}
+This distribution looks far more Gaussian than the original uniform
+distribution!
+
+This exercise is asking you to use your knowledge of the theory given in
+class to relate the two distributions.
+
+\subsection{\texorpdfstring{\textbf{Resolution Part
+1}}{Resolution Part 1}}\label{resolution-part-1}
+
+We start by running a 1000 simulations of 40 exponentials.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Required libraries}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\NormalTok{## setting seed}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#No. of values (n) = 40, lambda = 0.2, No.of iterations, at least 1000, numsim=2000,Theoretical mean =1 / lambda or 1 / 0.2 }
+\NormalTok{lambda <-}\StringTok{ }\FloatTok{0.2} 
+\NormalTok{nosim <-}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{1000} \CommentTok{# Number of Simulations/rows}
+\NormalTok{n <-}\StringTok{ }\DecValTok{40} 
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Generating data using
+rexp}\label{generating-data-using-rexp}
+
+Use the rexp function to develop a dataset with the mean and lambda
+specified above.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#sd(apply(matrix(rnorm(nosim*n), nosim), 1, mean))}
+
+\CommentTok{#Create a matrix of simulated values:}
+\NormalTok{e_matrix <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{sapply}\NormalTok{(nosim, }\ControlFlowTok{function}\NormalTok{(x) \{}\KeywordTok{mean}\NormalTok{(}\KeywordTok{rexp}\NormalTok{(n, lambda))\}))}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{1.} Show where the distribution is centered at and compare it to
+the theoretical center of the distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sim_mean <-}\StringTok{ }\KeywordTok{apply}\NormalTok{(e_matrix, }\DecValTok{2}\NormalTok{, mean)}
+\NormalTok{sim_mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        x 
+## 4.990025
+\end{verbatim}
+
+Which is very close to the expected theoretical center of the
+distribution:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{th_mean <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\NormalTok{lambda}
+\NormalTok{th_mean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5
+\end{verbatim}
+
+\textbf{2.}Show how variable it is and compare it to the theoretical
+variance of the distribution. .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sim_SD <-}\StringTok{ }\KeywordTok{sd}\NormalTok{((e_matrix}\OperatorTok{$}\NormalTok{x)) }
+\NormalTok{sim_SD}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7817394
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sim_Var <-}\StringTok{ }\KeywordTok{var}\NormalTok{(e_matrix}\OperatorTok{$}\NormalTok{x)}
+\NormalTok{sim_Var}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.6111165
+\end{verbatim}
+
+Let's compare, the expected theretical SD and Variance are:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{th_SD <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{lambda)}\OperatorTok{/}\KeywordTok{sqrt}\NormalTok{(n)}
+\NormalTok{th_SD}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7905694
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{th_Var <-}\StringTok{ }\NormalTok{th_SD}\OperatorTok{^}\DecValTok{2}
+\NormalTok{th_Var}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.625
+\end{verbatim}
+
+Comparing Theoretical and actual Values of mean,Standard deviation and
+variance Table
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Variable & Theoretical val & Actual Val\tabularnewline
+\midrule
+\endhead
+Mean & 5 & 5.048\tabularnewline
+SD & 0.791 & 0.796\tabularnewline
+Var & 0.625 & 0.634\tabularnewline
+\bottomrule
+\end{longtable}
+
+We can verify that the differences are minimal, as expected.
+
+\textbf{3.} Show that the distribution is approximately normal.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ e_matrix, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ x)) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{..density..), }\DataTypeTok{binwidth =} \FloatTok{0.20}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"slategray3"}\NormalTok{, }\DataTypeTok{col=}\StringTok{"black"}\NormalTok{)}
+\NormalTok{plot <-}\StringTok{ }\NormalTok{plot }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Density of 40 Numbers from Exponential Distribution"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Mean of 40 Selections"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Density"}\NormalTok{)}
+\NormalTok{plot <-}\StringTok{ }\NormalTok{plot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept=}\NormalTok{sim_mean,}\DataTypeTok{size=}\FloatTok{1.0}\NormalTok{, }\DataTypeTok{color=}\StringTok{"black"}\NormalTok{)}
+\NormalTok{plot <-}\StringTok{ }\NormalTok{plot }\OperatorTok{+}\StringTok{ }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun=}\NormalTok{dnorm,}\DataTypeTok{args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{mean=}\NormalTok{sim_mean, }\DataTypeTok{sd=}\NormalTok{sim_SD),}\DataTypeTok{color =} \StringTok{"dodgerblue4"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{1.0}\NormalTok{)}
+\NormalTok{plot <-}\StringTok{ }\NormalTok{plot}\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept=}\NormalTok{th_mean,}\DataTypeTok{size=}\FloatTok{1.0}\NormalTok{,}\DataTypeTok{color=}\StringTok{"indianred4"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{)}
+\NormalTok{plot <-}\StringTok{ }\NormalTok{plot }\OperatorTok{+}\StringTok{ }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun=}\NormalTok{dnorm,}\DataTypeTok{args=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{mean=}\NormalTok{th_mean, }\DataTypeTok{sd=}\NormalTok{th_SD),}\DataTypeTok{color =} \StringTok{"darkmagenta"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{1.0}\NormalTok{)}
+\NormalTok{plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Final-project_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+we conclude that the function appears to aproximate to nearly Normal.
+
+\end{document}
