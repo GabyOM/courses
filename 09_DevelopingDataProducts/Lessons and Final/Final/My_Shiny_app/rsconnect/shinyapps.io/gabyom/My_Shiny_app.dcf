@@ -1,0 +1,12 @@
+name: My_Shiny_app
+title: My_Shiny_app
+username:
+account: gabyom
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3878949
+bundleId: 4407564
+url: https://gabyom.shinyapps.io/My_Shiny_app/
+when: 1617025177.82654
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,58 @@
+---
+title: "R Markdown Presentation & Plotly"
+author: "Gabriela Ochoa"
+date: "29 marzo 2021"
+output: html_document
+---
+
+## Instructions
+Create a web page presentation using R Markdown that features a plot created with Plotly. Host your webpage on either GitHub Pages, RPubs, or NeoCities. Your webpage must contain the date that you created the document, and it must contain a plot created with Plotly. 
+
+## Review criteria
+
+The rubric contains the following two questions:
+
+1. Does the web page feature a date and is this date less than two months before the date that you're grading this assignment?
+2. Is the web page a presentation and does it feature an interactive plot that appears to have been created with Plotly?
+
+## Code and Data
+
+Through this code we try to plot the closing prices of major European stock indices in the years of 1991 to 1998.
+
+**Daily Closing Prices of Major European Stock Indices, 1991-1998**
+
+_Description_
+
+Contains the daily closing prices of major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted.
+
+_Format_
+
+A multivariate time series with `1860 observations` on `4 variables`. The object is of class `"mts"`.
+
+_Source_
+
+The data were kindly provided by Erste Bank AG, Vienna, Austria.
+
+```{r, echo=TRUE, eval=FALSE}
+library(plotly)
+library(tidyr)
+library(dplyr)
+data("EuStockMarkets")
+stocks <- as.data.frame(EuStockMarkets) %>%
+  gather(index, price) %>%
+  mutate(time = rep(time(EuStockMarkets), 4))
+plot_ly(stocks, x = ~time, y = ~price, color = ~index, mode = "lines")
+```
+
+## Plot
+
+```{r, echo=FALSE, eval=TRUE, message=FALSE}
+library(plotly)
+library(tidyr)
+library(dplyr)
+data("EuStockMarkets")
+stocks <- as.data.frame(EuStockMarkets) %>%
+  gather(index, price) %>%
+  mutate(time = rep(time(EuStockMarkets), 4))
+plot_ly(stocks, x = ~time, y = ~price, color = ~index, mode = "lines")
+```

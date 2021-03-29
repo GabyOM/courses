@@ -1,0 +1,39 @@
+---
+title: "Shiny Application and Reproducible Pitch Presentation"
+author: "Gabriela Ochoa"
+date: "29 marzo 2021"
+output: ioslides_presentation
+---
+# Looking for a car that fits **you** perfectly?
+
+## Introduction
+
+This presentation is done as part of the final course project for `Developing Data Products` course in the Data Science Specialization track by *John Hopkins University on Coursera*.
+
+## The Application 
+
+With this application you'll find different options which will help you choose a car that fits your own needs.
+
+You may enter `distance`, `price of gas`, etc, and the app will display different cars options.
+
+Additionally, you can also choose some characteristics of the cars that you desire: `Cylinders`, `Displacement`, `Horse Power` and `Transmission`. 
+
+## Dataset Overview
+
+The application uses 'mtcars' dataset from the 'datasets' package in R which lists down 10 aspects of automobile design and performance for 32 cars.
+
+```{r, echo=TRUE, comment=""}
+library(datasets)
+data(mtcars)
+head(mtcars, 4)
+
+```
+
+## Variable Correlation
+
+```{r, echo=TRUE, comment=""}
+library(datasets)
+data(mtcars)
+cor(mtcars)
+
+```

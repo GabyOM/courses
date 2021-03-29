@@ -1,0 +1,158 @@
+---
+title: "My Presentation"
+author: "Gabriela Ochoa"
+date: "29 marzo 2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, eval=FALSE}
+library(leaflet)
+my_map <- leaflet() %>%
+    addTiles()
+my_map
+```
+
+## My First Map
+```{r, echo=FALSE}
+library(leaflet)
+my_map <- leaflet() %>%
+    addTiles()
+#my_map=leaflet()
+#my_map_ addtiles(my_map)
+
+```
+
+
+
+## adding Markers
+
+you can add markers to your map one at a time using the `addMarkers()` function by specifying the longitude and latitude. ( (Here's)[https://twitter.com/drob/status/719927537330040832] a tip if you tend to mixthem up.) You can specify popup text for when you click on the marker with the `popup` argument
+
+```{r, echo=FALSE}
+my_map <- my_map %>%
+    addMarkers(lat = 45.065197449023096, lng=7.688543433084193,
+               popup="Dipartimento Scienze della Vita e Biologia dei Sistemi, Torino, Italia")
+my_map
+```
+
+
+
+## Adding Many Markers
+
+Adding one marker at a time is often not practical if you want to display many markers. If you have a data frame with columns 'lat' and 'lgn' you can pipe that data frame into `leaflet()` to add all the points at once.
+
+
+```{r}
+set.seed(2021-03-29)
+df <- data.frame(lat=runif(20, min=45.06, max=45.07),
+                 lng=runif(20,min=7.68, max=7.69))
+
+df%>%
+    leaflet() %>%
+    addTiles() %>%
+    addMarkers()
+```
+## Making Custom Markers
+
+The blue markers that leaflet comes packaged with may not be enough depending on what you're mapping. Thankfully you can make your own markers from `.png` files.
+```{r}
+UniTologo <- makeIcon(
+    iconUrl = "https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/university.png",
+    iconWidth = 31*215/230, iconHeight = 31,
+    iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+UniToLatLong <- data.frame(
+        lat=c(45.06799552681228, 45.066012433792025, 45.06978466785086, 45.06909281379662),
+        lng=c(7.68492998940553, 7.68895792532822, 7.6889884769095636, 7.701008019886973))
+
+UniToLatLong %>%
+    leaflet()%>%
+    addTiles()%>%
+    addMarkers(icon=UniTologo)
+
+```
+
+```{r}
+UniTosites <- c("<a href='https://matematicalm.campusnet.unito.it/do/home.pl'> Dipartimento di Matematica </a>",
+                "<a href='https://naturali.campusnet.unito.it/do/home.pl'> Dipartimento Scienze della Vita e Biologia dei Sistemi </a>",
+                "<a href= 'www.unito.it'> Campus Luigi Einaudi </a>",
+                "<a href='https://www.bibliosum.unito.it/it/biblioteche-e-mediateca/biblioteca-di-scienze-letterarie'> Biblioteca di Scienze letterarie e filologiche </a>"
+)
+UniToLatLong %>%
+    leaflet()%>%
+    addTiles()%>%
+    addMarkers(icon=UniTologo, popup = UniTosites)
+                
+```
+## Mapping Clusters
+
+Sometimes you might have so many points on a map that it doesn't make sense to plot every marker. In these situations leaflet allows you to plot clusters of markers using `addMarkers(clusterOptions=markerClusterPtions())`. When you zoom in to each cluster, the clusters will separate until you can see the individual markers.
+```{r}
+df <- data.frame(lat=runif(500, min=45.06, max=45.07),
+                 lng=runif(500,min=7.68, max=7.69))
+df%>%
+    leaflet() %>%
+    addTiles() %>%
+    addMarkers(clusterOptions=markerClusterOptions())
+
+```
+
+## Mapping Circle Markers
+
+Instead of adding markers or clusters you can easily add circle markers using `addCircleMarkers()`
+```{r, eval=FALSE}
+df <- data.frame(lat=runif(20, min=45.06, max=45.07),
+                 lng=runif(20,min=7.68, max=7.69))
+df%>%
+    leaflet() %>%
+    addTiles() %>%
+    addCircleMarkers()
+
+```
+## Drawing Circles
+
+You can draw arbitrary shapes on the maps you create, including circles and squares. The code below draws a map where the circle on each city is proportional to the population of that city.
+
+```{r}
+md_cities <- data.frame(name = c("Turin", "Milano", "Aosta", "Alessandria"),
+                        pop = c(886837, 1352000, 125666, 428826),
+                        lat=c(45.07136830668985, 45.476558662095954,45.73461120325041,44.900803577821385),
+                        lng=c(7.683154172571898,9.198328117976184, 7.3148135850045275, 8.623927100366284))
+md_cities %>%
+    leaflet()%>%
+    addTiles()%>%
+    addCircles(weight=5, radius=sqrt(md_cities$pop)*30)
+    
+
+```
+## Drawing Rectangles
+You can add rectangles on leafle maps as well:
+```{r}
+leaflet()%>%
+    addTiles()%>%
+    addRectangles(lat1 =45.0713, lng1 = 7.6831,
+                  lat2 = 45.0745, lng2 = 7.6864)
+```
+
+
+## Adding Legends
+
+Adding a legend can be useful if you hace markers on your map with different colors:
+```{r}
+df <- data.frame(lat=runif(20, min=45.06, max=45.07),
+                 lng=runif(20,min=7.68, max=7.69),
+                 col=sample(c("red", "blue", "green"), 20, replace=TRUE),
+                 stringsAsFactors = FALSE)
+
+df %>%
+    leaflet()%>%
+    addTiles()%>%
+    addCircleMarkers(color=df$col)%>%
+    addLegend(labels=LETTERS[1:3], colors=c("red", "blue", "green"))
+```
+
