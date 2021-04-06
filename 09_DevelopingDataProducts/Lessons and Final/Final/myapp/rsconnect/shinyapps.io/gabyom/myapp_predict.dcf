@@ -1,0 +1,12 @@
+name: myapp_predict
+title: myapp_predict
+username:
+account: gabyom
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3916859
+bundleId: 4437509
+url: https://gabyom.shinyapps.io/myapp_predict/
+when: 1617717355.41632
+asMultiple: FALSE
+asStatic: FALSE
